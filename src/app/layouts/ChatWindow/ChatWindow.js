@@ -1,21 +1,58 @@
 import React, { useState } from "react";
-import { Box, TextField, Button, Paper, useMediaQuery } from "@mui/material";
+import { Box, TextField, Button, Paper, useMediaQuery, CircularProgress } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import { SidebarWidth } from "../../assets/global/Theme-variable"; // Sidebar width variable
 
 const ChatWindow = ({ isSidebarOpen, sx }) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
   
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
   const headerHeight = 64; // Adjust according to your Header's height
 
-  const handleSend = () => {
-    if (input.trim() !== "") {
-      setMessages([...messages, { text: input, sender: "user" }]);
-      setInput("");
-    }
-  };
+//   const handleSend = () => {
+//     if (input.trim() !== "") {
+//       setMessages([...messages, { text: input, sender: "user" }]);
+//       setInput("");
+//     }
+//   };
+
+    const handleSend = async () => {
+        if (input.trim() === "") return;
+
+        // Add user's message to the chat
+        const newMessages = [...messages, { text: input, sender: "user" }];
+        setMessages(newMessages);
+        setInput("");
+        setLoading(true); // Show loading indicator
+
+        try {
+        const response = await fetch("https://api.echogpt.live/v1/chat/completions", {
+            method: "POST",
+            headers: {
+            "Content-Type": "application/json",
+            "x-api-key": "echogpt-3NR5iOFDib-xjA5yXdZot-kh3mCDi0Zp-UJTWFmG3YS-tYesdozpW4nVvXvZN1-XGdou", // Replace with your actual API key
+            },
+            body: JSON.stringify({
+            messages: [{ role: "system", content: input }], // Send user input to API
+            model: "EchoGPT",
+            }),
+        });
+
+        const data = await response.json();
+        const botResponse = data?.choices?.[0]?.message?.content || "I'm sorry, I didn't understand that.";
+
+        // Add chatbot's response to the chat
+        setMessages([...newMessages, { text: botResponse, sender: "bot" }]);
+        } catch (error) {
+        console.error("Error:", error);
+        setMessages([...newMessages, { text: "Error fetching response", sender: "bot" }]);
+        } finally {
+        setLoading(false);
+        }
+    };
+
 
   return (
     <Box
@@ -62,6 +99,11 @@ const ChatWindow = ({ isSidebarOpen, sx }) => {
             </Box>
           </Box>
         ))}
+        {loading && (
+          <Box sx={{ display: "flex", justifyContent: "center", mt: 1 }}>
+            <CircularProgress size={24} />
+          </Box>
+        )}
       </Paper>
 
       {/* Chat Input */}
@@ -80,7 +122,7 @@ const ChatWindow = ({ isSidebarOpen, sx }) => {
           onChange={(e) => setInput(e.target.value)}
           onKeyPress={(e) => e.key === "Enter" && handleSend()}
         />
-        <Button variant="contained" color="primary" onClick={handleSend}>
+        <Button variant="contained" color="primary" onClick={handleSend} disabled={loading}>
           <SendIcon />
         </Button>
       </Box>
