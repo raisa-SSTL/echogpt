@@ -7,10 +7,12 @@ import {
     ListItem,
     ListItemIcon,
     ListItemText,
+    Button
   } from "@mui/material";
   import {SidebarWidth} from "../../assets/global/Theme-variable";
   import LogoIcon from "../Logo/LogoIcon";
   import Menuitems from "./data";
+  import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 
   const Sidebar = (props) => {
 
@@ -27,7 +29,22 @@ import {
               <div class="text-[24px] font-[900] text-black dark:text-white tracking-[10px] logo-text">EchoGPT</div>
             </Box>
           {/* </Link> */}
+
+          {/* New Chat Button */}
+            <Box sx={{ mt: 3, mb: 2, textAlign: "center" }}>
+                <Button 
+                    variant="contained" 
+                    // color="primary" 
+                    startIcon={<ChatBubbleOutlineIcon />}
+                    sx={{ backgroundColor: "#713cf4", "&:hover": { backgroundColor: "#5a2dbd" } }}
+                    fullWidth
+                    // onClick={handleNewChat}
+                >
+                    New Chat
+                </Button>
+            </Box>
     
+            {/* Sidebar Menu */}
           <Box>
             <List
               sx={{

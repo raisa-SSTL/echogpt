@@ -1,9 +1,9 @@
-import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
+import HistoryOutlinedIcon from "@mui/icons-material/HistoryOutlined";
 
 const Menuitems = [
     {
         title: "Chat History",
-        icon: ChatBubbleOutlineIcon,
+        icon: HistoryOutlinedIcon,
         href: "/dashboards/dashboard1",
       },
 
