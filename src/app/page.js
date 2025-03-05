@@ -1,4 +1,4 @@
-import Image from "next/image";
+// import Image from "next/image";
 import FullLayout from "./layouts/FullLayout";
 
 export default function Home() {

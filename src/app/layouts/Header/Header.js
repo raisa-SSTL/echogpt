@@ -28,6 +28,7 @@ import {
 
     return (
         <AppBar sx={props.sx} elevation={0} className={props.customClass}>
+        {/* <AppBar sx={{ position: "fixed", top: 0, width: "100%", zIndex: 1201 }} elevation={0} className={props.customClass}> */}
             <Toolbar>
                 <IconButton
                     color="inherit"

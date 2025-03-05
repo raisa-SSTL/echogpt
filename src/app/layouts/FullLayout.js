@@ -3,17 +3,33 @@ import React, {useState} from "react"
 import {
     experimentalStyled,
     useMediaQuery,
-    // Container,
-    // Box,
+    Box,
+    Container
   } from "@mui/material";
   import Header from "./Header/Header";
   import Sidebar from "./Sidebar/Sidebar";
+  import ChatWindow from "./ChatWindow/ChatWindow";
+  import { TopbarHeight } from "../assets/global/Theme-variable";
 
 const MainWrapper = experimentalStyled("div")(({ theme }) => ({
     display: "flex",
     minHeight: "100vh",
     overflow: "hidden",
     width: "100%",
+  }));
+
+  const PageWrapper = experimentalStyled("div")(({ theme }) => ({
+    display: "flex",
+    flex: "1 1 auto",
+    overflow: "hidden",
+  
+    backgroundColor: theme.palette.background.default,
+    [theme.breakpoints.up("lg")]: {
+      paddingTop: TopbarHeight,
+    },
+    [theme.breakpoints.down("lg")]: {
+      paddingTop: "64px",
+    },
   }));
 
 const FullLayout = () => {
@@ -38,6 +54,7 @@ const FullLayout = () => {
                 isMobileSidebarOpen={isMobileSidebarOpen}
                 onSidebarClose={() => setMobileSidebarOpen(false)}
             />
+            <ChatWindow isSidebarOpen={isSidebarOpen} sx={{ marginTop: "64px" }}/>
         </MainWrapper>
     );
 
