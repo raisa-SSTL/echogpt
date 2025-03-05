@@ -137,8 +137,8 @@ import {
                         }}
                     >
                         <Avatar
-                        // src={userimg}
-                        // alt={userimg}
+                        src="/assets/images/user.jpg"
+                        alt="/assets/images/user.jpg"
                         sx={{
                             width: "30px",
                             height: "30px",

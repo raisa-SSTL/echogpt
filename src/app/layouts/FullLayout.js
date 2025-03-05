@@ -7,6 +7,7 @@ import {
     // Box,
   } from "@mui/material";
   import Header from "./Header/Header";
+  import Sidebar from "./Sidebar/Sidebar";
 
 const MainWrapper = experimentalStyled("div")(({ theme }) => ({
     display: "flex",
@@ -31,6 +32,11 @@ const FullLayout = () => {
                 }}
                 toggleSidebar={() => setSidebarOpen(!isSidebarOpen)}
                 toggleMobileSidebar={() => setMobileSidebarOpen(true)}
+            />
+            <Sidebar
+                isSidebarOpen={isSidebarOpen}
+                isMobileSidebarOpen={isMobileSidebarOpen}
+                onSidebarClose={() => setMobileSidebarOpen(false)}
             />
         </MainWrapper>
     );
