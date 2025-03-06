@@ -55,7 +55,7 @@ const FullLayout = () => {
             {activeComponent === "ChatWindow" ? (
               <ChatWindow isSidebarOpen={isSidebarOpen} sx={{ marginTop: "64px" }} selectedChatId={selectedChatId} onChatUpdate={handleChatUpdate} />
             ) : (
-              <ChatHistory isSidebarOpen={isSidebarOpen} sx={{ marginTop: "64px" }} onSelectChat={handleChatSelect} />
+              <ChatHistory isSidebarOpen={isSidebarOpen} sx={{ marginTop: "64px" }} onSelectChat={handleChatSelect} setActiveComponent={setActiveComponent} />
             )}
         </MainWrapper>
     );

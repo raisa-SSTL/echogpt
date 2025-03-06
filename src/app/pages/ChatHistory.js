@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Box, TextField, Button, Paper, useMediaQuery, CircularProgress, List, ListItem, ListItemText } from "@mui/material";
 import { SidebarWidth } from "../assets/global/Theme-variable";
 
-const ChatHistory = ({ isSidebarOpen, sx, onSelectChat }) => {
+const ChatHistory = ({ isSidebarOpen, sx, onSelectChat, setActiveComponent }) => {
 
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
   const headerHeight = 64;
@@ -44,7 +44,15 @@ const ChatHistory = ({ isSidebarOpen, sx, onSelectChat }) => {
               </ListItem>
             ) : (
               chatHistory.map((chat) => (
-                <ListItem key={chat.id} button="true" onClick={() => onSelectChat(chat.id)} sx={{ cursor: "pointer" }}>
+                <ListItem 
+                  key={chat.id} button="true" 
+                  // onClick={() => onSelectChat(chat.id)} 
+                  onClick={() => {
+                    onSelectChat(chat.id);  
+                    setActiveComponent("ChatWindow"); 
+                  }} 
+                  sx={{ cursor: "pointer" }}
+                >
                   <ListItemText primary={chat.title} />
                 </ListItem>
               ))
