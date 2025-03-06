@@ -23,11 +23,19 @@ import {
         <Box sx={{ p: 3, height: "calc(100vh - 40px)" }}>
             <Box sx={{ display: "flex", alignItems: "Center", gap: "10px"}}>
               <LogoIcon style={{ width: 40, height: 40 }} />
-              <div className="text-[24px] font-[900] text-black dark:text-white tracking-[10px] logo-text">EchoGPT</div>
+              {/* <div className="text-[24px] font-[900] text-black dark:text-white tracking-[10px] logo-text">EchoGPT</div> */}
+              <div className="relative"> 
+                <div className="text-[24px] font-[900] text-[#713cf4]  tracking-[10px] logo-text">
+                  EchoGPT
+                </div>
+                <div className="text-[24px] font-[900] text-[#713cf4] tracking-[10px] logo-text absolute bottom-[-20px] left-0 transform scale-y-[-1] opacity-40 bg-gradient-to-t from-[#713cf4] to-white bg-clip-text text-transparent">
+                  EchoGPT
+                </div>
+              </div>
             </Box>
 
           {/* New Chat Button */}
-            <Box sx={{ mt: 3, mb: 2, textAlign: "center" }}>
+            <Box sx={{ mt: 5, mb: 2, textAlign: "center" }}>
                 <Button 
                     variant="contained" 
                     // color="primary" 
