@@ -11,13 +11,6 @@ const ChatWindow = ({ isSidebarOpen, sx }) => {
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
   const headerHeight = 64; // Adjust according to your Header's height
 
-//   const handleSend = () => {
-//     if (input.trim() !== "") {
-//       setMessages([...messages, { text: input, sender: "user" }]);
-//       setInput("");
-//     }
-//   };
-
     const handleSend = async () => {
         if (input.trim() === "") return;
 

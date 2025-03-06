@@ -10,6 +10,7 @@ import {
   import Sidebar from "./Sidebar/Sidebar";
   import ChatWindow from "./ChatWindow/ChatWindow";
   import { TopbarHeight } from "../assets/global/Theme-variable";
+  import ChatHistory from "../pages/ChatHistory";
 
 const MainWrapper = experimentalStyled("div")(({ theme }) => ({
     display: "flex",
@@ -18,25 +19,12 @@ const MainWrapper = experimentalStyled("div")(({ theme }) => ({
     width: "100%",
   }));
 
-  const PageWrapper = experimentalStyled("div")(({ theme }) => ({
-    display: "flex",
-    flex: "1 1 auto",
-    overflow: "hidden",
-  
-    backgroundColor: theme.palette.background.default,
-    [theme.breakpoints.up("lg")]: {
-      paddingTop: TopbarHeight,
-    },
-    [theme.breakpoints.down("lg")]: {
-      paddingTop: "64px",
-    },
-  }));
-
 const FullLayout = () => {
 
     const [isSidebarOpen, setSidebarOpen] = useState(true);
     const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
     const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
+    const [activeComponent, setActiveComponent] = useState("ChatWindow");
 
     return (
         <MainWrapper>
@@ -53,8 +41,13 @@ const FullLayout = () => {
                 isSidebarOpen={isSidebarOpen}
                 isMobileSidebarOpen={isMobileSidebarOpen}
                 onSidebarClose={() => setMobileSidebarOpen(false)}
+                setActiveComponent={setActiveComponent}
             />
-            <ChatWindow isSidebarOpen={isSidebarOpen} sx={{ marginTop: "64px" }}/>
+            {activeComponent === "ChatWindow" ? (
+              <ChatWindow isSidebarOpen={isSidebarOpen} sx={{ marginTop: "64px" }}  />
+            ) : (
+              <ChatHistory isSidebarOpen={isSidebarOpen} sx={{ marginTop: "64px" }}  />
+            )}
         </MainWrapper>
     );
 
