@@ -51,6 +51,7 @@ const FullLayout = () => {
                 isMobileSidebarOpen={isMobileSidebarOpen}
                 onSidebarClose={() => setMobileSidebarOpen(false)}
                 setActiveComponent={setActiveComponent}
+                activeComponent={activeComponent}
             />
             {activeComponent === "ChatWindow" ? (
               <ChatWindow isSidebarOpen={isSidebarOpen} sx={{ marginTop: "64px" }} selectedChatId={selectedChatId} onChatUpdate={handleChatUpdate} />

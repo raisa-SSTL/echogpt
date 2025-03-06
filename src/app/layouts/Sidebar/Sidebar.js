@@ -38,13 +38,15 @@ import {
             <Box sx={{ mt: 5, mb: 2, textAlign: "center" }}>
                 <Button 
                     variant="contained" 
-                    // color="primary" 
                     startIcon={<ChatBubbleOutlineIcon />}
-                    sx={{ backgroundColor: "#713cf4", "&:hover": { backgroundColor: "#5a2dbd" } }}
+                    sx={{ 
+                      backgroundColor: "#713cf4", "&:hover": { backgroundColor: "#5a2dbd" } ,
+                      borderRadius: "50px",
+                      padding: "10px 20px",
+                    }}
                     fullWidth
-                    // onClick={() => props.setActiveComponent("ChatWindow")}
                     onClick={() => {
-                      props.setActiveComponent("ChatWindow"); // Set active component
+                      props.setActiveComponent("ChatWindow"); 
                       window.location.reload(); 
                     }}           
                     cursor="pointer"
@@ -55,27 +57,49 @@ import {
     
             {/* Sidebar Menu */}
           <Box>
-            <List
-              sx={{
-                mt: 4,
+            <Box 
+              sx={{ 
+                fontSize: "0.8rem", 
+                fontWeight: "bold", 
+                color: "gray", 
+                textTransform: "uppercase", 
+                // mb: 1,  
+                ml: 2,
+                mt: 5,
               }}
             >
+              ENGAGEMENT
+            </Box>
+
+            <List
+              // sx={{
+              //   mt: 4,
+              // }}
+            >
               {Menuitems.map((item, index) => {
+                const isActive = props.activeComponent === "ChatHistory" && item.title === "Chat History"; 
                 return (
                   <ListItem
                       button="true"
                       key={item.title}
                       onClick={() => props.setActiveComponent("ChatHistory")}
-                      // to={item.href}
                       sx={{
                         mb: 1,
-                        cursor: "pointer"
+                        cursor: "pointer",
+                        justifyContent: "flex-start", 
+                        textAlign: "left", 
+                        backgroundColor: isActive ? "#d4c3f7" : "transparent", 
+                        borderRadius: "10px", 
+                        "&:hover": {
+                          backgroundColor: "#d4c3f7", 
+                        },
                       }}
+                      
                     >
-                      <ListItemIcon>
+                      <ListItemIcon sx={{ minWidth: "40px" }} >
                         <item.icon width="20" height="20" />
                       </ListItemIcon>
-                      <ListItemText>{item.title}</ListItemText>
+                      <ListItemText sx={{ textAlign: "left", ml: "-4px" }}>{item.title}</ListItemText>
                   </ListItem>
                 );
               })}
