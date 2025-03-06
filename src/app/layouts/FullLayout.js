@@ -25,6 +25,15 @@ const FullLayout = () => {
     const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
     const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
     const [activeComponent, setActiveComponent] = useState("ChatWindow");
+    const [selectedChatId, setSelectedChatId] = useState(null);
+
+    const handleChatSelect = (chatId) => {
+      setSelectedChatId(chatId);
+    };
+
+    const handleChatUpdate = () => {
+      setSelectedChatId(null); // Force reloading of history
+    };
 
     return (
         <MainWrapper>
@@ -44,9 +53,9 @@ const FullLayout = () => {
                 setActiveComponent={setActiveComponent}
             />
             {activeComponent === "ChatWindow" ? (
-              <ChatWindow isSidebarOpen={isSidebarOpen} sx={{ marginTop: "64px" }}  />
+              <ChatWindow isSidebarOpen={isSidebarOpen} sx={{ marginTop: "64px" }} selectedChatId={selectedChatId} onChatUpdate={handleChatUpdate} />
             ) : (
-              <ChatHistory isSidebarOpen={isSidebarOpen} sx={{ marginTop: "64px" }}  />
+              <ChatHistory isSidebarOpen={isSidebarOpen} sx={{ marginTop: "64px" }} onSelectChat={handleChatSelect} />
             )}
         </MainWrapper>
     );

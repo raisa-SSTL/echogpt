@@ -1,15 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, TextField, Button, Paper, useMediaQuery, CircularProgress } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import { SidebarWidth } from "../../assets/global/Theme-variable"; // Sidebar width variable
 
-const ChatWindow = ({ isSidebarOpen, sx }) => {
+const ChatWindow = ({ isSidebarOpen, sx, selectedChatId, onChatUpdate, }) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
   const headerHeight = 64; // Adjust according to your Header's height
+
+  useEffect(() => {
+    // Load chat messages from localStorage when chat is selected
+    if (selectedChatId) {
+      const storedChats = JSON.parse(localStorage.getItem("chatHistory")) || [];
+      const selectedChat = storedChats.find(chat => chat.id === selectedChatId);
+      setMessages(selectedChat ? selectedChat.messages : []);
+    }
+  }, [selectedChatId]);
 
     const handleSend = async () => {
         if (input.trim() === "") return;
@@ -37,13 +46,40 @@ const ChatWindow = ({ isSidebarOpen, sx }) => {
         const botResponse = data?.choices?.[0]?.message?.content || "I'm sorry, I didn't understand that.";
 
         // Add chatbot's response to the chat
-        setMessages([...newMessages, { text: botResponse, sender: "bot" }]);
+        // setMessages([...newMessages, { text: botResponse, sender: "bot" }]);
+
+        const updatedMessages = [...newMessages, { text: botResponse, sender: "bot" }];
+        setMessages(updatedMessages);
+
+        // Save conversation to localStorage
+        saveChatToHistory(updatedMessages);
+
         } catch (error) {
         console.error("Error:", error);
         setMessages([...newMessages, { text: "Error fetching response", sender: "bot" }]);
         } finally {
         setLoading(false);
         }
+    };
+
+    const saveChatToHistory = (updatedMessages) => {
+      let chatHistory = JSON.parse(localStorage.getItem("chatHistory")) || [];
+  
+      if (selectedChatId) {
+        chatHistory = chatHistory.map(chat => 
+          chat.id === selectedChatId ? { ...chat, messages: updatedMessages } : chat
+        );
+      } else {
+        const newChat = {
+          id: Date.now().toString(),
+          title: updatedMessages[0]?.text.slice(0, 20) || "New Chat",
+          messages: updatedMessages,
+        };
+        chatHistory.push(newChat);
+      }
+  
+      localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
+      onChatUpdate(); // Notify ChatHistory component to update list
     };
 
 

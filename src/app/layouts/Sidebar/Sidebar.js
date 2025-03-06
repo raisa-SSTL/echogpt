@@ -34,7 +34,11 @@ import {
                     startIcon={<ChatBubbleOutlineIcon />}
                     sx={{ backgroundColor: "#713cf4", "&:hover": { backgroundColor: "#5a2dbd" } }}
                     fullWidth
-                    onClick={() => props.setActiveComponent("ChatWindow")}
+                    // onClick={() => props.setActiveComponent("ChatWindow")}
+                    onClick={() => {
+                      props.setActiveComponent("ChatWindow"); // Set active component
+                      window.location.reload(); 
+                    }}           
                     cursor="pointer"
                 >
                     New Chat

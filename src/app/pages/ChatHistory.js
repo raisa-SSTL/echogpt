@@ -1,11 +1,18 @@
-import React, { useState } from "react";
-import { Box, TextField, Button, Paper, useMediaQuery, CircularProgress } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import { Box, TextField, Button, Paper, useMediaQuery, CircularProgress, List, ListItem, ListItemText } from "@mui/material";
 import { SidebarWidth } from "../assets/global/Theme-variable";
 
-const ChatHistory = ({ isSidebarOpen, sx }) => {
+const ChatHistory = ({ isSidebarOpen, sx, onSelectChat }) => {
 
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
   const headerHeight = 64;
+  const [chatHistory, setChatHistory] = useState([]);
+
+  useEffect(() => {
+    // Load chat history from localStorage
+    const storedChats = JSON.parse(localStorage.getItem("chatHistory")) || [];
+    setChatHistory(storedChats);
+  }, []);
 
     return (
       <Box
@@ -30,7 +37,19 @@ const ChatHistory = ({ isSidebarOpen, sx }) => {
             borderRadius: 2,
           }}
         >
-        
+          <List>
+            {chatHistory.length === 0 ? (
+              <ListItem>
+                <ListItemText primary="No chat history available" />
+              </ListItem>
+            ) : (
+              chatHistory.map((chat) => (
+                <ListItem key={chat.id} button="true" onClick={() => onSelectChat(chat.id)} sx={{ cursor: "pointer" }}>
+                  <ListItemText primary={chat.title} />
+                </ListItem>
+              ))
+            )}
+          </List>
         </Paper>
 
       </Box>
