@@ -29,7 +29,7 @@ import {
                         },
                     }}
                     >
-                    <MenuOutlinedIcon width="20" height="20" />
+                    <MenuOutlinedIcon width="20" height="20" style={{ color: "#713cf4" }}/>
                 </IconButton>
                 <Box flexGrow={1} />
                 <Box

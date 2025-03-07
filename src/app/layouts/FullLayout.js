@@ -57,6 +57,7 @@ const FullLayout = () => {
                 sx={{
                 paddingLeft: isSidebarOpen && lgUp ? "265px" : "",
                 backgroundColor: "#ffffff",
+                // backgroundColor: "orange",
                 }}
                 toggleSidebar={() => setSidebarOpen(!isSidebarOpen)}
                 toggleMobileSidebar={() => setMobileSidebarOpen(true)}
