@@ -3,6 +3,7 @@ import { Box, TextField, Button, useMediaQuery, CircularProgress } from "@mui/ma
 import SendIcon from "@mui/icons-material/Send";
 import { SidebarWidth } from "../../assets/global/Theme-variable"; // Sidebar width variable
 import LogoIcon from "../Logo/LogoIcon";
+import AddIcon from "@mui/icons-material/Add";
 
 const ChatWindow = ({ isSidebarOpen, sx, selectedChatId, onChatUpdate }) => {
   const [messages, setMessages] = useState([]);
@@ -212,6 +213,7 @@ const ChatWindow = ({ isSidebarOpen, sx, selectedChatId, onChatUpdate }) => {
           display: "flex",
           gap: 1,
           marginTop: 2,
+          alignItems: "center",
         }}
       >
         <TextField
@@ -221,9 +223,44 @@ const ChatWindow = ({ isSidebarOpen, sx, selectedChatId, onChatUpdate }) => {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyPress={(e) => e.key === "Enter" && handleSend()}
+          sx={{
+            // height: "50px",
+            "& .MuiInputBase-root": { height: "50px" }, // Ensures input height is adjusted
+            "& .MuiInputBase-input": { padding: "14px 16px" },
+          }}
         />
-        <Button variant="contained" color="primary" onClick={handleSend} disabled={loading}>
-          <SendIcon />
+        <Button
+          variant="contained"
+          sx={{
+            minWidth: "40px",
+            width: "40px",
+            height: "40px",
+            borderRadius: "50%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "#713cf4",
+          }}
+        >
+          <AddIcon />
+        </Button>
+        <Button 
+          variant="contained" 
+          onClick={handleSend} 
+          disabled={loading}
+          sx={{
+            minWidth: "40px",
+            width: "40px",
+            height: "40px",
+            borderRadius: "50%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "#713cf4",
+            pl: 2.5
+          }}
+        >
+          <SendIcon style={{ width: 23, height: 23 }} />
         </Button>
       </Box>
     </Box>
