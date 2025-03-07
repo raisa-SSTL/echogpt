@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Box, TextField, Button, Paper, useMediaQuery, CircularProgress, List, ListItem, ListItemText } from "@mui/material";
+import { Box, TextField, Button, Paper, useMediaQuery, CircularProgress, List, ListItem, ListItemText, ListItemIcon, IconButton } from "@mui/material";
 import { SidebarWidth } from "../assets/global/Theme-variable";
+import DeleteIcon from "@mui/icons-material/Delete";
+import LogoIcon from "../layouts/Logo/LogoIcon";
 
 const ChatHistory = ({ isSidebarOpen, sx, onSelectChat, setActiveComponent }) => {
 
@@ -13,6 +15,12 @@ const ChatHistory = ({ isSidebarOpen, sx, onSelectChat, setActiveComponent }) =>
     const storedChats = JSON.parse(localStorage.getItem("chatHistory")) || [];
     setChatHistory(storedChats);
   }, []);
+
+  const handleDeleteChat = (chatId) => {
+    const updatedChats = chatHistory.filter(chat => chat.id !== chatId);
+    setChatHistory(updatedChats);
+    localStorage.setItem("chatHistory", JSON.stringify(updatedChats));
+  };
 
     return (
       <Box
@@ -46,14 +54,35 @@ const ChatHistory = ({ isSidebarOpen, sx, onSelectChat, setActiveComponent }) =>
               chatHistory.map((chat) => (
                 <ListItem 
                   key={chat.id} button="true" 
+                  className="border border-gray-300 rounded-lg p-3 mb-2 shadow-sm transition duration-200 flex items-center justify-between"
                   // onClick={() => onSelectChat(chat.id)} 
                   onClick={() => {
                     onSelectChat(chat.id);  
                     setActiveComponent("ChatWindow"); 
                   }} 
-                  sx={{ cursor: "pointer" }}
+                  sx={{ cursor: "pointer", 
+                          "&:hover": {
+                          backgroundColor: "#d4c3f7", 
+                          }, 
+                  }}
                 >
-                  <ListItemText primary={chat.title} />
+                   {/* Logo Icon */}
+                  <ListItemIcon>
+                    <LogoIcon style={{ width: 30, height: 30 }} />
+                  </ListItemIcon>
+                  {/* Chat Title */}
+                  <ListItemText 
+                    primary={chat.title} 
+                    className="flex-grow"
+                    primaryTypographyProps={{ style: { fontSize: "18px" } }} 
+                   />
+                  {/* Delete Icon */}
+                  <IconButton onClick={(e) => { 
+                    e.stopPropagation(); // Prevent triggering chat selection
+                    handleDeleteChat(chat.id);
+                  }}>
+                    <DeleteIcon className="text-red-500 hover:text-red-700" />
+                  </IconButton>
                 </ListItem>
               ))
             )}
