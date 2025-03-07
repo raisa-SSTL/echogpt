@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef} from "react";
-import { Box, TextField, Button, Paper, useMediaQuery, CircularProgress } from "@mui/material";
+import { Box, TextField, Button, useMediaQuery, CircularProgress } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import { SidebarWidth } from "../../assets/global/Theme-variable"; // Sidebar width variable
 import LogoIcon from "../Logo/LogoIcon";
 
-const ChatWindow = ({ isSidebarOpen, sx, selectedChatId, onChatUpdate, }) => {
+const ChatWindow = ({ isSidebarOpen, sx, selectedChatId, onChatUpdate }) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -27,44 +27,85 @@ const ChatWindow = ({ isSidebarOpen, sx, selectedChatId, onChatUpdate, }) => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-    const handleSend = async () => {
-        if (input.trim() === "") return;
+    // const handleSend = async () => {
+    //     if (input.trim() === "") return;
 
-        // Add user's message to the chat
-        const newMessages = [...messages, { text: input, sender: "user" }];
-        setMessages(newMessages);
-        setInput("");
-        setLoading(true); // Show loading indicator
+    //     // Add user's message to the chat
+    //     const newMessages = [...messages, { text: input, sender: "user" }];
+    //     setMessages(newMessages);
+    //     setInput("");
+    //     setLoading(true); // Show loading indicator
 
-        try {
+    //     try {
+    //     const response = await fetch("https://api.echogpt.live/v1/chat/completions", {
+    //         method: "POST",
+    //         headers: {
+    //         "Content-Type": "application/json",
+    //         "x-api-key": "echogpt-3NR5iOFDib-xjA5yXdZot-kh3mCDi0Zp-UJTWFmG3YS-tYesdozpW4nVvXvZN1-XGdou", // Replace with your actual API key
+    //         },
+    //         body: JSON.stringify({
+    //         messages: [{ role: "system", content: input }], // Send user input to API
+    //         model: "EchoGPT",
+    //         }),
+    //     });
+
+    //     const data = await response.json();
+    //     const botResponse = data?.choices?.[0]?.message?.content || "I'm sorry, I didn't understand that.";
+
+    //     // Add chatbot's response to the chat
+    //     const updatedMessages = [...newMessages, { text: botResponse, sender: "bot" }];
+    //     setMessages(updatedMessages);
+
+    //     // Save conversation to localStorage
+    //     saveChatToHistory(updatedMessages);
+
+    //     } catch (error) {
+    //     console.error("Error:", error);
+    //     setMessages([...newMessages, { text: "Error fetching response", sender: "bot" }]);
+    //     } finally {
+    //     setLoading(false);
+    //     }
+    // };
+
+    const handleSend = async () => { //enables chat updates through chat list
+      if (input.trim() === "") return;
+    
+      // Add user's message to the chat
+      const newMessages = [...messages, { text: input, sender: "user" }];
+      setMessages(newMessages);
+      setInput("");
+      setLoading(true); // shows loading indicator
+    
+      try {
         const response = await fetch("https://api.echogpt.live/v1/chat/completions", {
-            method: "POST",
-            headers: {
+          method: "POST",
+          headers: {
             "Content-Type": "application/json",
             "x-api-key": "echogpt-3NR5iOFDib-xjA5yXdZot-kh3mCDi0Zp-UJTWFmG3YS-tYesdozpW4nVvXvZN1-XGdou", // Replace with your actual API key
-            },
-            body: JSON.stringify({
-            messages: [{ role: "system", content: input }], // Send user input to API
+          },
+          body: JSON.stringify({
+            messages: [{ role: "system", content: input }], // sends user input to API
             model: "EchoGPT",
-            }),
+          }),
         });
-
+    
         const data = await response.json();
         const botResponse = data?.choices?.[0]?.message?.content || "I'm sorry, I didn't understand that.";
-
+    
         // Add chatbot's response to the chat
         const updatedMessages = [...newMessages, { text: botResponse, sender: "bot" }];
         setMessages(updatedMessages);
-
-        // Save conversation to localStorage
+    
+        // Save the updated conversation to localStorage
         saveChatToHistory(updatedMessages);
-
-        } catch (error) {
+    
+      } catch (error) {
         console.error("Error:", error);
         setMessages([...newMessages, { text: "Error fetching response", sender: "bot" }]);
-        } finally {
+        saveChatToHistory([...newMessages, { text: "Error fetching response", sender: "bot" }]);
+      } finally {
         setLoading(false);
-        }
+      }
     };
 
     const saveChatToHistory = (updatedMessages) => {
@@ -86,7 +127,6 @@ const ChatWindow = ({ isSidebarOpen, sx, selectedChatId, onChatUpdate, }) => {
       localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
       onChatUpdate(); // Notify ChatHistory component to update list
     };
-
 
   return (
     <Box
@@ -133,7 +173,6 @@ const ChatWindow = ({ isSidebarOpen, sx, selectedChatId, onChatUpdate, }) => {
                   height: 30,
                   borderRadius: "50%",
                   position: "absolute",
-                  // bottom: -5, // Positions slightly below the chat bubble
                   left: -45, // Adjusted to appear outside the chat bubble
                   boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.2)",
                   backgroundColor: "#fff", // Optional: background color
