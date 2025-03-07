@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Box, TextField, Button, Paper, useMediaQuery, CircularProgress } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import { SidebarWidth } from "../../assets/global/Theme-variable"; // Sidebar width variable
+import LogoIcon from "../Logo/LogoIcon";
 
 const ChatWindow = ({ isSidebarOpen, sx, selectedChatId, onChatUpdate, }) => {
   const [messages, setMessages] = useState([]);
@@ -46,8 +47,6 @@ const ChatWindow = ({ isSidebarOpen, sx, selectedChatId, onChatUpdate, }) => {
         const botResponse = data?.choices?.[0]?.message?.content || "I'm sorry, I didn't understand that.";
 
         // Add chatbot's response to the chat
-        // setMessages([...newMessages, { text: botResponse, sender: "bot" }]);
-
         const updatedMessages = [...newMessages, { text: botResponse, sender: "bot" }];
         setMessages(updatedMessages);
 
@@ -97,13 +96,13 @@ const ChatWindow = ({ isSidebarOpen, sx, selectedChatId, onChatUpdate, }) => {
       }}
     >
       {/* Chat Messages */}
-      <Paper
+      <Box
         sx={{
           flex: 1,
           overflowY: "auto",
           padding: 2,
-          backgroundColor: "#f4f4f4",
-          borderRadius: 2,
+          // backgroundColor: "#f4f4f4",
+          // borderRadius: 2,
         }}
       >
         {messages.map((msg, index) => (
@@ -113,8 +112,33 @@ const ChatWindow = ({ isSidebarOpen, sx, selectedChatId, onChatUpdate, }) => {
               display: "flex",
               justifyContent: msg.sender === "user" ? "flex-end" : "flex-start",
               marginBottom: 1,
+              alignItems: "flex-end",
+              position: "relative",
+              marginLeft: msg.sender === "bot" ? "40px" : "0px",
             }}
           >
+            {msg.sender === "bot" && (
+              <Box
+                // component="img"
+                // src={}
+                // alt="Bot"
+                sx={{
+                  width: 30,
+                  height: 30,
+                  borderRadius: "50%",
+                  position: "absolute",
+                  // bottom: -5, // Positions slightly below the chat bubble
+                  left: -45, // Adjusted to appear outside the chat bubble
+                  boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.2)",
+                  backgroundColor: "#fff", // Optional: background color
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                 <LogoIcon style={{ width: 30, height: 30 }} />
+              </Box>
+            )}
             <Box
               sx={{
                 backgroundColor: msg.sender === "user" ? "#713cf4" : "#e0e0e0",
@@ -133,7 +157,7 @@ const ChatWindow = ({ isSidebarOpen, sx, selectedChatId, onChatUpdate, }) => {
             <CircularProgress size={24} />
           </Box>
         )}
-      </Paper>
+      </Box>
 
       {/* Chat Input */}
       <Box
