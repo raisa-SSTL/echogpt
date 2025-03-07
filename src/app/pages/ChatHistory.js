@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { Box, TextField, Button, Paper, useMediaQuery, CircularProgress, List, ListItem, ListItemText, ListItemIcon, IconButton } from "@mui/material";
+import { Box, TextField, Button, Paper, useMediaQuery, List, ListItem, ListItemText, ListItemIcon, IconButton, InputAdornment } from "@mui/material";
 import { SidebarWidth } from "../assets/global/Theme-variable";
 import DeleteIcon from "@mui/icons-material/Delete";
 import LogoIcon from "../layouts/Logo/LogoIcon";
+import SearchIcon from "@mui/icons-material/Search";
 
 const ChatHistory = ({ isSidebarOpen, sx, onSelectChat, setActiveComponent }) => {
 
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
   const headerHeight = 64;
   const [chatHistory, setChatHistory] = useState([]);
+  // const isSmallScreen = useMediaQuery("(max-width: 640px)");
+  const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("sm"));
 
   useEffect(() => {
     // Load chat history from localStorage
@@ -36,15 +39,67 @@ const ChatHistory = ({ isSidebarOpen, sx, onSelectChat, setActiveComponent }) =>
         }}
       >
         {/* Chat History List */}
-        <Paper
+        <Box
           sx={{
             flex: 1,
             overflowY: "auto",
-            padding: 2,
-            backgroundColor: "#f4f4f4",
+            // pl: 10,
+            // pr: 10,
+            // pt:3,
+            px: 4,
+            pt: 3,
+            // backgroundColor: "#f4f4f4",
             borderRadius: 2,
           }}
         >
+          {/* Title and Search Bar */}
+          <Box className="relative flex items-center justify-between mb-10"
+            sx={{
+              display: "flex",
+              flexDirection: isSmallScreen ? "column" : "row", // Stack on small screens
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: isSmallScreen ? 2 : 0,
+              mb: 3, // Spacing below the box
+            }}
+          >
+            {/* Centered Title */}
+            {/* <h3 className="absolute left-1/2 transform -translate-x-1/2 text-4xl font-semibold">Chat History</h3> */}
+            <h3 
+              style={{
+                fontSize: "24px",
+                fontWeight: "bold",
+                textAlign: "left",
+                width: "100%",
+              }}
+            >
+              Chat History
+            </h3>
+
+            {/* Search Bar */}
+            <TextField
+              variant="outlined"
+              placeholder="Search chats..."
+              size="small"
+              className="w-1/4"
+              sx={{ 
+                minWidth: "200px", 
+                width: isSmallScreen ? "100%" : "auto",
+                borderRadius: "50px", // Round shape 
+                "& .MuiOutlinedInput-root": { 
+                  borderRadius: "50px" 
+                } 
+              }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon color="disabled" />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Box>
+
           <List>
             {chatHistory.length === 0 ? (
               <ListItem>
@@ -87,7 +142,7 @@ const ChatHistory = ({ isSidebarOpen, sx, onSelectChat, setActiveComponent }) =>
               ))
             )}
           </List>
-        </Paper>
+        </Box>
 
       </Box>
     );
