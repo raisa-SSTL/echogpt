@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef} from "react";
 import { Box, TextField, Button, Paper, useMediaQuery, CircularProgress } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import { SidebarWidth } from "../../assets/global/Theme-variable"; // Sidebar width variable
@@ -11,6 +11,7 @@ const ChatWindow = ({ isSidebarOpen, sx, selectedChatId, onChatUpdate, }) => {
   
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
   const headerHeight = 64; // Adjust according to your Header's height
+  const messagesEndRef = useRef(null);
 
   useEffect(() => {
     // Load chat messages from localStorage when chat is selected
@@ -20,6 +21,11 @@ const ChatWindow = ({ isSidebarOpen, sx, selectedChatId, onChatUpdate, }) => {
       setMessages(selectedChat ? selectedChat.messages : []);
     }
   }, [selectedChatId]);
+
+  useEffect(() => {
+    // Scroll to bottom when messages update
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
     const handleSend = async () => {
         if (input.trim() === "") return;
@@ -157,6 +163,8 @@ const ChatWindow = ({ isSidebarOpen, sx, selectedChatId, onChatUpdate, }) => {
             <CircularProgress size={24} />
           </Box>
         )}
+        {/* Invisible div for auto-scrolling */}
+        <div ref={messagesEndRef} />
       </Box>
 
       {/* Chat Input */}
