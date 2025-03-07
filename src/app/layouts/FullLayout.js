@@ -32,7 +32,7 @@ const FullLayout = () => {
     };
 
     const handleChatUpdate = () => {
-      setSelectedChatId(null); // Force reloading of history
+      setSelectedChatId(null); 
     };
 
     return (
@@ -40,8 +40,7 @@ const FullLayout = () => {
             <Header
                 sx={{
                 paddingLeft: isSidebarOpen && lgUp ? "265px" : "",
-                // backgroundColor: "#ffffff",
-                backgroundColor: "orange",
+                backgroundColor: "#ffffff",
                 }}
                 toggleSidebar={() => setSidebarOpen(!isSidebarOpen)}
                 toggleMobileSidebar={() => setMobileSidebarOpen(true)}
