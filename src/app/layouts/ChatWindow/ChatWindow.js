@@ -53,10 +53,11 @@ const ChatWindow = ({ isSidebarOpen, sx, selectedChatId, onChatUpdate }) => {
         });
     
         const data = await response.json();
+        const createdTime = data?.created || new Date().toISOString();
         const botResponse = data?.choices?.[0]?.message?.content || "I'm sorry, I didn't understand that.";
     
         // Add chatbot's response to the chat
-        const updatedMessages = [...newMessages, { text: botResponse, sender: "bot" }];
+        const updatedMessages = [...newMessages, { text: botResponse, sender: "bot", created: createdTime }];
         setMessages(updatedMessages);
     
         // Save the updated conversation to localStorage
@@ -65,7 +66,7 @@ const ChatWindow = ({ isSidebarOpen, sx, selectedChatId, onChatUpdate }) => {
       } catch (error) {
         console.error("Error:", error);
         setMessages([...newMessages, { text: "Error fetching response", sender: "bot" }]);
-        saveChatToHistory([...newMessages, { text: "Error fetching response", sender: "bot" }]);
+        saveChatToHistory([...newMessages, { text: "Error fetching response", sender: "bot", created: new Date().toISOString() }]);
       } finally {
         setLoading(false);
       }

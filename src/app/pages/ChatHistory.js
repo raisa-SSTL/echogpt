@@ -4,6 +4,7 @@ import { SidebarWidth } from "../assets/global/Theme-variable";
 import DeleteIcon from "@mui/icons-material/Delete";
 import LogoIcon from "../layouts/Logo/LogoIcon";
 import SearchIcon from "@mui/icons-material/Search";
+import Swal from "sweetalert2";
 
 const ChatHistory = ({ isSidebarOpen, sx, onSelectChat, setActiveComponent }) => {
 
@@ -19,12 +20,32 @@ const ChatHistory = ({ isSidebarOpen, sx, onSelectChat, setActiveComponent }) =>
     setChatHistory(storedChats);
   }, []);
 
-  const handleDeleteChat = (chatId) => {
-    const updatedChats = chatHistory.filter(chat => chat.id !== chatId);
-    setChatHistory(updatedChats);
-    localStorage.setItem("chatHistory", JSON.stringify(updatedChats));
-  };
+  // const handleDeleteChat = (chatId) => {
+  //   const updatedChats = chatHistory.filter(chat => chat.id !== chatId);
+  //   setChatHistory(updatedChats);
+  //   localStorage.setItem("chatHistory", JSON.stringify(updatedChats));
+  // };
 
+  const handleDeleteChat = (chatId) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to recover this chat!",
+      icon: "warning",
+      showCancelButton: false,  // Hide cancel button
+      showCloseButton: true,  // Show close (X) button at the top right
+      confirmButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const updatedChats = chatHistory.filter(chat => chat.id !== chatId);
+        setChatHistory(updatedChats);
+        localStorage.setItem("chatHistory", JSON.stringify(updatedChats));
+  
+        Swal.fire("Deleted!", "Your chat has been deleted.", "success");
+      }
+    });
+  };
+  
     return (
       <Box
         sx={{
@@ -130,6 +151,12 @@ const ChatHistory = ({ isSidebarOpen, sx, onSelectChat, setActiveComponent }) =>
                     primary={chat.title} 
                     className="flex-grow"
                     primaryTypographyProps={{ style: { fontSize: "18px" } }} 
+                    secondary={
+                      lastBotMessage?.created
+                        ? `Last Updated: ${new Date(lastBotMessage.created).toLocaleString()}`
+                        : "No timestamp available"
+                    }
+                    secondaryTypographyProps={{ style: { fontSize: "14px", color: "#6b7280" } }}
                    />
                   {/* Delete Icon */}
                   <IconButton onClick={(e) => { 
