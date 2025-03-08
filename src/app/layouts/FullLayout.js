@@ -26,8 +26,8 @@ const FullLayout = () => {
     const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
     const [activeComponent, setActiveComponent] = useState("ChatWindow");
     const [selectedChatId, setSelectedChatId] = useState(null);
-    const [activeChatId, setActiveChatId] = useState(null);
-    const [chatHistory, setChatHistory] = useState([]);
+    // const [activeChatId, setActiveChatId] = useState(null);
+    // const [chatHistory, setChatHistory] = useState([]);
 
     const handleChatSelect = (chatId) => {
       setSelectedChatId(chatId);
@@ -37,19 +37,19 @@ const FullLayout = () => {
       setSelectedChatId(null); 
     };
 
-    useEffect(() => {
-      const storedChats = JSON.parse(localStorage.getItem("chatHistory")) || [];
-      setChatHistory(storedChats);
-    }, []);
+    // useEffect(() => {
+    //   const storedChats = JSON.parse(localStorage.getItem("chatHistory")) || [];
+    //   setChatHistory(storedChats);
+    // }, []);
 
-    const handleSelectChat = (chatId) => {
-      setActiveChatId(chatId);
-    };
+    // const handleSelectChat = (chatId) => {
+    //   setActiveChatId(chatId);
+    // };
 
     // Update localStorage when chat history changes
-    useEffect(() => {
-      localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
-    }, [chatHistory]);
+    // useEffect(() => {
+    //   localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
+    // }, [chatHistory]);
 
     return (
         <MainWrapper>
@@ -70,9 +70,18 @@ const FullLayout = () => {
                 activeComponent={activeComponent}
             />
             {activeComponent === "ChatWindow" ? (
-              <ChatWindow isSidebarOpen={isSidebarOpen} sx={{ marginTop: "64px" }} selectedChatId={selectedChatId} onChatUpdate={handleChatUpdate} activeChatId={activeChatId} setActiveChatId={setActiveChatId} chatHistory={chatHistory} setChatHistory={setChatHistory} />
+              <ChatWindow isSidebarOpen={isSidebarOpen} sx={{ marginTop: "64px" }} selectedChatId={selectedChatId} onChatUpdate={handleChatUpdate} 
+                // activeChatId={activeChatId} 
+                // setActiveChatId={setActiveChatId} 
+                // chatHistory={chatHistory} 
+                // setChatHistory={setChatHistory} 
+              />
             ) : (
-              <ChatHistory isSidebarOpen={isSidebarOpen} sx={{ marginTop: "64px" }} onSelectChat={handleChatSelect} setActiveComponent={setActiveComponent} activeChatId={activeChatId} setActiveChatId={setActiveChatId} chatHistory={chatHistory} />
+              <ChatHistory isSidebarOpen={isSidebarOpen} sx={{ marginTop: "64px" }} onSelectChat={handleChatSelect} setActiveComponent={setActiveComponent} 
+                // activeChatId={activeChatId} 
+                // setActiveChatId={setActiveChatId} 
+                // chatHistory={chatHistory} 
+              />
             )}
         </MainWrapper>
     );

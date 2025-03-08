@@ -78,7 +78,8 @@ const ChatWindow = ({ isSidebarOpen, sx, selectedChatId, onChatUpdate }) => {
         chatHistory = chatHistory.map(chat => 
           chat.id === selectedChatId ? { ...chat, messages: updatedMessages } : chat
         );
-      } else {
+      } 
+      else {
         const newChat = {
           id: Date.now().toString(),
           title: updatedMessages[0]?.text.slice(0, 20) || "New Chat",
