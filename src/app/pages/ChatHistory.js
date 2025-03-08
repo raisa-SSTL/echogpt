@@ -151,12 +151,6 @@ const ChatHistory = ({ isSidebarOpen, sx, onSelectChat, setActiveComponent }) =>
                     primary={chat.title} 
                     className="flex-grow"
                     primaryTypographyProps={{ style: { fontSize: "18px" } }} 
-                    secondary={
-                      lastBotMessage?.created
-                        ? `Last Updated: ${new Date(lastBotMessage.created).toLocaleString()}`
-                        : "No timestamp available"
-                    }
-                    secondaryTypographyProps={{ style: { fontSize: "14px", color: "#6b7280" } }}
                    />
                   {/* Delete Icon */}
                   <IconButton onClick={(e) => { 
