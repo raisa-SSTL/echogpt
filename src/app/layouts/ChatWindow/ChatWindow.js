@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef} from "react";
-import { Box, TextField, Button, useMediaQuery, CircularProgress } from "@mui/material";
+import { Box, TextField, Button, useMediaQuery, CircularProgress, IconButton, InputAdornment, Typography } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import { SidebarWidth } from "../../assets/global/Theme-variable"; // Sidebar width variable
 import LogoIcon from "../Logo/LogoIcon";
 import AddIcon from "@mui/icons-material/Add";
+import LoopIcon from "@mui/icons-material/Loop";
+import MicIcon from "@mui/icons-material/Mic";
 
 const ChatWindow = ({ isSidebarOpen, sx, selectedChatId, onChatUpdate }) => {
   const [messages, setMessages] = useState([]);
@@ -27,46 +29,6 @@ const ChatWindow = ({ isSidebarOpen, sx, selectedChatId, onChatUpdate }) => {
     // Scroll to bottom when messages update
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
-
-    // const handleSend = async () => {
-    //     if (input.trim() === "") return;
-
-    //     // Add user's message to the chat
-    //     const newMessages = [...messages, { text: input, sender: "user" }];
-    //     setMessages(newMessages);
-    //     setInput("");
-    //     setLoading(true); // Show loading indicator
-
-    //     try {
-    //     const response = await fetch("https://api.echogpt.live/v1/chat/completions", {
-    //         method: "POST",
-    //         headers: {
-    //         "Content-Type": "application/json",
-    //         "x-api-key": "echogpt-3NR5iOFDib-xjA5yXdZot-kh3mCDi0Zp-UJTWFmG3YS-tYesdozpW4nVvXvZN1-XGdou", // Replace with your actual API key
-    //         },
-    //         body: JSON.stringify({
-    //         messages: [{ role: "system", content: input }], // Send user input to API
-    //         model: "EchoGPT",
-    //         }),
-    //     });
-
-    //     const data = await response.json();
-    //     const botResponse = data?.choices?.[0]?.message?.content || "I'm sorry, I didn't understand that.";
-
-    //     // Add chatbot's response to the chat
-    //     const updatedMessages = [...newMessages, { text: botResponse, sender: "bot" }];
-    //     setMessages(updatedMessages);
-
-    //     // Save conversation to localStorage
-    //     saveChatToHistory(updatedMessages);
-
-    //     } catch (error) {
-    //     console.error("Error:", error);
-    //     setMessages([...newMessages, { text: "Error fetching response", sender: "bot" }]);
-    //     } finally {
-    //     setLoading(false);
-    //     }
-    // };
 
     const handleSend = async () => { //enables chat updates through chat list
       if (input.trim() === "") return;
@@ -148,11 +110,33 @@ const ChatWindow = ({ isSidebarOpen, sx, selectedChatId, onChatUpdate }) => {
           flex: 1,
           overflowY: "auto",
           padding: 2,
-          // backgroundColor: "#f4f4f4",
-          // borderRadius: 2,
         }}
       >
-        {messages.map((msg, index) => (
+         {/* for no messages */}
+        {messages.length === 0 ? (
+          <Box
+            sx={{
+              flex: 1,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              textAlign: "center",
+              height: "100%", 
+            }}
+          >
+            <Box sx={{ width: 80, height: 80, marginBottom: 2 }}>
+              <LogoIcon sx={{ width: "100%", height:"100%" }} /> {/* Logo */}
+            </Box>
+            <Typography variant="h5" fontWeight="bold" gutterBottom>
+              EchoGPT
+            </Typography>
+            <Typography variant="body1" color="text.secondary" maxWidth="80%">
+              Interact with EchoGPT, an AI that reflects your input for quick ideas, summaries, or feedback.
+            </Typography>
+          </Box>
+        ) : (
+        messages.map((msg, index) => (
           <Box
             key={index}
             sx={{
@@ -166,9 +150,6 @@ const ChatWindow = ({ isSidebarOpen, sx, selectedChatId, onChatUpdate }) => {
           >
             {msg.sender === "bot" && (
               <Box
-                // component="img"
-                // src={}
-                // alt="Bot"
                 sx={{
                   width: 30,
                   height: 30,
@@ -197,7 +178,8 @@ const ChatWindow = ({ isSidebarOpen, sx, selectedChatId, onChatUpdate }) => {
               {msg.text}
             </Box>
           </Box>
-        ))}
+        ))
+      )}
         {loading && (
           <Box sx={{ display: "flex", justifyContent: "center", mt: 1 }}>
             <CircularProgress size={24} />
@@ -211,57 +193,68 @@ const ChatWindow = ({ isSidebarOpen, sx, selectedChatId, onChatUpdate }) => {
       <Box
         sx={{
           display: "flex",
-          gap: 1,
-          marginTop: 2,
           alignItems: "center",
+          backgroundColor: "#f4f4f8",
+          borderRadius: "24px",
+          padding: "10px 15px",
+          boxShadow: "0px 2px 5px rgba(0,0,0,0.1)",
+          width: "100%",
         }}
       >
+        {/* Plus Button (New Chat) */}
+        <IconButton sx={{ color: "#713cf4", margin: "10px 10px", }}>
+          <AddIcon />
+        </IconButton>
+
+        {/* Text Input Field */}
         <TextField
           fullWidth
           variant="outlined"
-          placeholder="Type a message..."
+          placeholder="Ask a question..."
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyPress={(e) => e.key === "Enter" && handleSend()}
           sx={{
-            // height: "50px",
-            "& .MuiInputBase-root": { height: "50px" }, // Ensures input height is adjusted
-            "& .MuiInputBase-input": { padding: "14px 16px" },
+            "& .MuiOutlinedInput-root": {
+              borderRadius: "24px",
+              backgroundColor: "#fff",
+              paddingLeft: "12px",
+              paddingRight: "12px",
+              "& fieldset": { border: "none" },
+            },
+            "& .MuiInputBase-input": {
+              padding: "10px 14px",
+            },
+          }}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                {loading ? (
+                  <LoopIcon sx={{ animation: "spin 1s linear infinite" }} />
+                ) : (
+                  <MicIcon sx={{ color: "#555" }} />
+                )}
+              </InputAdornment>
+            ),
           }}
         />
-        <Button
-          variant="contained"
-          sx={{
-            minWidth: "40px",
-            width: "40px",
-            height: "40px",
-            borderRadius: "50%",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: "#713cf4",
-          }}
-        >
-          <AddIcon />
-        </Button>
-        <Button 
-          variant="contained" 
-          onClick={handleSend} 
+
+        {/* Send Button */}
+        <IconButton
+          onClick={handleSend}
           disabled={loading}
           sx={{
-            minWidth: "40px",
+            backgroundColor: "#713cf4",
+            color: "#fff",
             width: "40px",
             height: "40px",
             borderRadius: "50%",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: "#713cf4",
-            pl: 2.5
+            margin: "10px 10px",
+            "&:hover": { backgroundColor: "#5a2ec2" },
           }}
         >
-          <SendIcon style={{ width: 23, height: 23 }} />
-        </Button>
+          <SendIcon />
+        </IconButton>
       </Box>
     </Box>
   );
